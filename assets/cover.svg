@@ -1,0 +1,57 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0a1f"/>
+      <stop offset="0.55" stop-color="#1a1340"/>
+      <stop offset="1" stop-color="#2b1055"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#14f195"/>
+      <stop offset="1" stop-color="#9945ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#9945ff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#9945ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="930" cy="150" r="320" fill="url(#glow)"/>
+
+  <!-- subtle grid -->
+  <g stroke="#ffffff" stroke-opacity="0.05" stroke-width="1">
+    <line x1="0" y1="157" x2="1200" y2="157"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="472" x2="1200" y2="472"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+  </g>
+
+  <!-- x*y=k hyperbola in a plotting frame on the right -->
+  <g transform="translate(760,150)">
+    <rect x="0" y="0" width="340" height="340" rx="14" fill="#ffffff" fill-opacity="0.04" stroke="#ffffff" stroke-opacity="0.12"/>
+    <!-- axes -->
+    <line x1="30" y1="310" x2="315" y2="310" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/>
+    <line x1="30" y1="310" x2="30" y2="25" stroke="#ffffff" stroke-opacity="0.25" stroke-width="2"/>
+    <!-- curve y = k/x : decreasing, convex toward the origin -->
+    <path d="M 50 55 C 74 235, 150 292, 302 297" fill="none" stroke="url(#accent)" stroke-width="5" stroke-linecap="round"/>
+    <!-- reserve point on the curve -->
+    <circle cx="120" cy="168" r="7" fill="#14f195"/>
+    <text x="135" y="150" fill="#cfc7ff" font-size="20">x · y = k</text>
+    <text x="205" y="332" fill="#8f87b8" font-size="18">reserve A</text>
+    <text x="-8" y="20" fill="#8f87b8" font-size="18">reserve B</text>
+  </g>
+
+  <!-- title block -->
+  <text x="90" y="210" fill="#ffffff" font-size="74" font-weight="700">Constant-Product</text>
+  <text x="90" y="292" fill="#ffffff" font-size="74" font-weight="700">AMM</text>
+  <rect x="92" y="326" width="150" height="6" rx="3" fill="url(#accent)"/>
+
+  <text x="90" y="392" fill="#c9c2e8" font-size="30" font-weight="500">Solana &#183; Anchor &#183; Rust</text>
+  <text x="90" y="436" fill="#8f87b8" font-size="22">Pools, LP tokens and swaps with a configurable fee</text>
+
+  <!-- footer -->
+  <text x="90" y="560" fill="#6f6796" font-size="20">anchor-constant-product-amm</text>
+  <text x="1110" y="560" fill="#6f6796" font-size="20" text-anchor="end">Ali Amini</text>
+</svg>

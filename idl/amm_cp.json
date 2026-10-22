@@ -1,0 +1,582 @@
+{
+  "address": "AdvuNWNdKBhLx3FqAaHeHcMoXKV7Jxw5Ez9pw2Xns5Vo",
+  "metadata": {
+    "name": "amm_cp",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Constant-product AMM (Uniswap-v2 style) on Solana, built with Anchor"
+  },
+  "docs": [
+    "A minimal constant-product (x * y = k) automated market maker.",
+    "",
+    "Each pool is a PDA that owns two token vaults and an LP mint. Liquidity",
+    "providers deposit both tokens and receive LP tokens; traders swap one token",
+    "for the other paying a configurable fee that accrues to the pool."
+  ],
+  "instructions": [
+    {
+      "name": "add_liquidity",
+      "docs": [
+        "Deposit token A and token B and receive LP tokens."
+      ],
+      "discriminator": [
+        181,
+        157,
+        89,
+        67,
+        143,
+        182,
+        52,
+        72
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint_a",
+                "account": "Pool"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint_b",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_a",
+          "writable": true
+        },
+        {
+          "name": "vault_b",
+          "writable": true
+        },
+        {
+          "name": "lp_mint",
+          "writable": true
+        },
+        {
+          "name": "user_token_a",
+          "writable": true
+        },
+        {
+          "name": "user_token_b",
+          "writable": true
+        },
+        {
+          "name": "user_lp",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount_a_desired",
+          "type": "u64"
+        },
+        {
+          "name": "amount_b_desired",
+          "type": "u64"
+        },
+        {
+          "name": "min_lp_out",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_pool",
+      "docs": [
+        "Create a new pool for an ordered pair of mints with a given swap fee."
+      ],
+      "discriminator": [
+        95,
+        180,
+        10,
+        172,
+        84,
+        174,
+        232,
+        40
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint_a"
+        },
+        {
+          "name": "mint_b"
+        },
+        {
+          "name": "pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint_a"
+              },
+              {
+                "kind": "account",
+                "path": "mint_b"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_a",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_b",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  98
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "lp_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  112,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "fee_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "remove_liquidity",
+      "docs": [
+        "Burn LP tokens and withdraw the proportional share of both reserves."
+      ],
+      "discriminator": [
+        80,
+        85,
+        209,
+        72,
+        24,
+        206,
+        177,
+        108
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint_a",
+                "account": "Pool"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint_b",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_a",
+          "writable": true
+        },
+        {
+          "name": "vault_b",
+          "writable": true
+        },
+        {
+          "name": "lp_mint",
+          "writable": true
+        },
+        {
+          "name": "user_token_a",
+          "writable": true
+        },
+        {
+          "name": "user_token_b",
+          "writable": true
+        },
+        {
+          "name": "user_lp",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "lp_amount",
+          "type": "u64"
+        },
+        {
+          "name": "min_amount_a",
+          "type": "u64"
+        },
+        {
+          "name": "min_amount_b",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "swap",
+      "docs": [
+        "Swap `amount_in` of one token for the other along the constant product."
+      ],
+      "discriminator": [
+        248,
+        198,
+        158,
+        145,
+        225,
+        117,
+        135,
+        200
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "signer": true
+        },
+        {
+          "name": "pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint_a",
+                "account": "Pool"
+              },
+              {
+                "kind": "account",
+                "path": "pool.mint_b",
+                "account": "Pool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_a",
+          "writable": true
+        },
+        {
+          "name": "vault_b",
+          "writable": true
+        },
+        {
+          "name": "user_token_a",
+          "writable": true
+        },
+        {
+          "name": "user_token_b",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount_in",
+          "type": "u64"
+        },
+        {
+          "name": "min_amount_out",
+          "type": "u64"
+        },
+        {
+          "name": "a_to_b",
+          "type": "bool"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Pool",
+      "discriminator": [
+        241,
+        154,
+        109,
+        4,
+        17,
+        177,
+        109,
+        188
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "IdenticalMints",
+      "msg": "The two mints must be different"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidMintOrder",
+      "msg": "Mints must be supplied in canonical order (mint_a < mint_b)"
+    },
+    {
+      "code": 6002,
+      "name": "FeeTooHigh",
+      "msg": "Fee exceeds the maximum allowed"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidMint",
+      "msg": "A supplied token account has the wrong mint"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidOwner",
+      "msg": "A supplied token account has the wrong owner"
+    },
+    {
+      "code": 6005,
+      "name": "ZeroAmount",
+      "msg": "Amount must be greater than zero"
+    },
+    {
+      "code": 6006,
+      "name": "ZeroLiquidity",
+      "msg": "Resulting liquidity would be zero"
+    },
+    {
+      "code": 6007,
+      "name": "EmptyReserves",
+      "msg": "Pool reserves are empty"
+    },
+    {
+      "code": 6008,
+      "name": "SlippageExceeded",
+      "msg": "Output below the requested minimum (slippage)"
+    },
+    {
+      "code": 6009,
+      "name": "MathOverflow",
+      "msg": "Arithmetic overflow"
+    }
+  ],
+  "types": [
+    {
+      "name": "Pool",
+      "docs": [
+        "On-chain state for a single constant-product liquidity pool.",
+        "",
+        "The pool account is itself the authority (signer, via its PDA) over the two",
+        "token vaults and the LP mint, so no separate authority account is needed."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint_a",
+            "docs": [
+              "Mint of token A (canonical ordering: mint_a < mint_b)."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "mint_b",
+            "docs": [
+              "Mint of token B."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "vault_a",
+            "docs": [
+              "Vault holding the pool's reserves of token A."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "vault_b",
+            "docs": [
+              "Vault holding the pool's reserves of token B."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "lp_mint",
+            "docs": [
+              "LP mint representing a share of the pool."
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_bps",
+            "docs": [
+              "Swap fee charged on the input amount, in basis points."
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "Bump of the pool PDA (used when the pool signs CPIs)."
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "FEE_DENOMINATOR",
+      "docs": [
+        "Fee denominator. Fees are expressed in basis points (1 bp = 1/10_000)."
+      ],
+      "type": "u64",
+      "value": "10000"
+    },
+    {
+      "name": "LP_MINT_DECIMALS",
+      "docs": [
+        "Decimals used by every pool's LP mint."
+      ],
+      "type": "u8",
+      "value": "9"
+    },
+    {
+      "name": "MAX_FEE_BPS",
+      "docs": [
+        "Maximum swap fee the pool may be created with (10%)."
+      ],
+      "type": "u16",
+      "value": "1000"
+    }
+  ]
+}
